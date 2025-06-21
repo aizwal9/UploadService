@@ -1,6 +1,7 @@
 package com.aizwal.document.controller;
 
 import com.aizwal.document.model.DocumentMetadata;
+import com.aizwal.document.service.CloudStorageService;
 import com.aizwal.document.service.DocumentPublisher;
 import com.aizwal.document.service.DocumentService;
 import com.aizwal.document.service.MetaDataExtractorService;
@@ -24,6 +25,8 @@ public class DocumentController {
     MetaDataExtractorService metadataExtractorService;
     @Resource
     DocumentPublisher documentPublisher;
+    @Resource
+    CloudStorageService cloudStorageService;
 
     @PostMapping("/upload")
     public ResponseEntity<String> uploadDocument(@RequestParam("file") MultipartFile file) {
@@ -32,6 +35,7 @@ public class DocumentController {
         }
         try {
             String docId = documentService.storeTempFile(file);
+            cloudStorageService.uploadFile(file, docId + "-" + file.getOriginalFilename());
             documentPublisher.publishDocId(docId);
             return ResponseEntity.accepted().body("File received. Document ID: " + docId);
         } catch (IOException e) {
