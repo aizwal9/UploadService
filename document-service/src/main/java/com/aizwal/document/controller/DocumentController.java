@@ -34,7 +34,7 @@ public class DocumentController {
             return ResponseEntity.badRequest().body("Empty file");
         }
         try {
-            String docId = documentService.storeTempFile(file);
+            String docId = documentService.storeTempFile(file);     // TODO : Only for testing purposes
             cloudStorageService.uploadFile(file, docId + "-" + file.getOriginalFilename());
             documentPublisher.publishDocId(docId);
             return ResponseEntity.accepted().body("File received. Document ID: " + docId);
@@ -43,6 +43,7 @@ public class DocumentController {
         }
     }
 
+    // TODO : Only for testing purposes
     @GetMapping("/extract")
     public ResponseEntity<?> extractMetadata(@RequestParam String docId) {
         try {
