@@ -1,0 +1,22 @@
+server:
+  port: 8082
+  #logging.level.root=DEBUG
+spring:
+  cloud:
+    gcp:
+      project-id: microservices-786
+      pubsub:
+        topic: document-processing-topic
+        subscription: document-processing-topic-sub
+#      credentials:
+#        location: ${GOOGLE_APPLICATION_CREDENTIALS}
+      storage:
+        bucket-name: doc-service-bucket
+
+  data:
+    mongodb:
+      database: doc-service
+
+logging:
+  level:
+    root: info

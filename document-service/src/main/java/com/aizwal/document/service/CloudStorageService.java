@@ -18,12 +18,12 @@ public class CloudStorageService {
     @Value("${spring.cloud.gcp.storage.bucket-name}")
     private String bucketName;
 
-    public void uploadFile(MultipartFile file, String destinationName) {
+    public void uploadFile(MultipartFile file, String objectName) {
         try {
-            BlobId blobId = BlobId.of(bucketName, "documents/" + destinationName);
+            BlobId blobId = BlobId.of(bucketName, objectName);
             BlobInfo blobInfo = BlobInfo.newBuilder(blobId).build();
             storage.create(blobInfo, file.getBytes());
-            System.out.println("File uploaded to GCS: " + destinationName);
+            System.out.println("File uploaded to GCS: " + objectName);
         } catch (IOException e) {
             throw new RuntimeException("Failed to upload file to GCS", e);
         }

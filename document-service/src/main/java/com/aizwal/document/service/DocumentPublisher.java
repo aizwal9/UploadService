@@ -16,7 +16,7 @@ public class DocumentPublisher {
         this.topicName = topicName;
     }
 
-    public void publishDocId(String docId) {
-        pubSubTemplate.publish(topicName, docId);
+    public void publishDocId(String message) {
+        pubSubTemplate.publish(topicName, message);
     }
 }

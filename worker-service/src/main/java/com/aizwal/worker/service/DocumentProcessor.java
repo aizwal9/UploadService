@@ -40,8 +40,10 @@ public class DocumentProcessor {
 
     public void processMessage(String messageJson) {
         try {
-            Map<String, String> message = mapper.readValue(messageJson, new TypeReference<>() {
-            });
+            Map<String, String> message = mapper.readValue(
+                    messageJson, new TypeReference<>() {
+                    }
+            );
             String filePath = message.get("filePath");
             String docId = message.get("docId");
             String fileName = message.get("fileName");

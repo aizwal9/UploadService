@@ -29,7 +29,6 @@ public class DocumentSubscriber {
     public DocumentSubscriber(PubSubTemplate pubSubTemplate, DocumentProcessor processor) {
         this.pubSubTemplate = pubSubTemplate;
         this.processor = processor;
-        log.info("<UNK>");
     }
 
     @PostConstruct
