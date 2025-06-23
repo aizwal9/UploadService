@@ -10,6 +10,7 @@ env:
   ZONE: asia-south1-a
   CLUSTER_NAME: document-cluster
   GAR_URL: asia-south1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/doc-registry
+  GOOGLE_CREDENTIALS: ${{ secrets.GCP_SA_KEY }}
 
 jobs:
   deploy:
@@ -37,7 +38,7 @@ jobs:
         working-directory: ./infra
         run: |
           terraform init
-          terraform apply -auto-approve -var="project_id=$PROJECT_ID"
+          terraform apply -auto-approve -var="gcp_credentials=$GOOGLE_CREDENTIALS" -var="project_id=$PROJECT_ID"
 
       - name: Build & Push Upload API Image
         run: |
