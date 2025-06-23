@@ -9,6 +9,11 @@ resource "google_artifact_registry_repository" "docker_repo" {
   repository_id = var.artifact_repo_name
   description   = "Artifact registry for doc pipeline"
   format        = "DOCKER"
+
+  lifecycle {
+    prevent_destroy = true
+    ignore_changes  = [labels, description]
+  }
 }
 
 resource "google_container_cluster" "gke_cluster" {
@@ -22,14 +27,29 @@ resource "google_container_cluster" "gke_cluster" {
       "https://www.googleapis.com/auth/cloud-platform"
     ]
   }
+
+  lifecycle {
+    prevent_destroy = true
+    ignore_changes  = [labels, description]
+  }
 }
 
 resource "google_storage_bucket" "doc_bucket" {
   name     = var.bucket_name
   location = var.region
   force_destroy = true
+
+  lifecycle {
+    prevent_destroy = true
+    ignore_changes  = [labels, description]
+  }
 }
 
 resource "google_pubsub_topic" "upload_topic" {
   name = var.topic_name
+
+  lifecycle {
+    prevent_destroy = true
+    ignore_changes  = [labels, description]
+  }
 }
