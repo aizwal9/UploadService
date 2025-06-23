@@ -9,13 +9,12 @@ import com.google.cloud.storage.BlobId;
 import com.google.cloud.storage.Storage;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.tika.Tika;
 import org.apache.tika.metadata.Metadata;
 import org.apache.tika.parser.AutoDetectParser;
 import org.apache.tika.parser.ParseContext;
+import org.apache.tika.sax.BodyContentHandler;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.xml.sax.helpers.DefaultHandler;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -53,17 +52,19 @@ public class DocumentProcessor {
             Blob blob = storage.get(BlobId.of(bucketName, filePath));
             byte[] fileContent = blob.getContent();
 
-            // Extract metadata
-            Tika tika = new Tika();
-            Metadata metadata = new Metadata();
+            //Extract metadata using Tika
             InputStream stream = new ByteArrayInputStream(fileContent);
+
             AutoDetectParser parser = new AutoDetectParser();
-            parser.parse(stream, new DefaultHandler(), metadata, new ParseContext());
+            Metadata tikaMetadata = new Metadata();
+            ParseContext context = new ParseContext();
+
+            parser.parse(stream, new BodyContentHandler(), tikaMetadata, context);
 
             // Convert metadata to map
             Map<String, String> extracted = new HashMap<>();
-            for (String name : metadata.names()) {
-                extracted.put(name, metadata.get(name));
+            for (String name : tikaMetadata.names()) {
+                extracted.put(name, tikaMetadata.get(name));
             }
 
             // Save to MongoDB
