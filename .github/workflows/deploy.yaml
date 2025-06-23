@@ -34,17 +34,11 @@ jobs:
       - name: Authenticate Docker with Artifact Registry
         run: gcloud auth configure-docker $REGION-docker.pkg.dev
 
-      - name: Terraform Init
-        working-directory: ./infra
-        run: terraform init
-
-      - name: Terraform Validate & Plan
-        working-directory: ./infra
-        run: terraform plan -out=tfplan
-
-      - name: Terraform Apply (Safe)
-        working-directory: ./infra
-        run: terraform apply -auto-approve -var="gcp_credentials=$GOOGLE_CREDENTIALS" -var="project_id=$PROJECT_ID"
+#      - name: Terraform Init & Apply (infra/)
+#        working-directory: ./infra
+#        run: |
+#          terraform init
+#          terraform apply -auto-approve -var="gcp_credentials=$GOOGLE_CREDENTIALS" -var="project_id=$PROJECT_ID"
 
       - name: Build & Push Upload API Image
         run: |
