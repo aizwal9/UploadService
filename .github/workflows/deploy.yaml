@@ -34,23 +34,11 @@ jobs:
       - name: Authenticate Docker with Artifact Registry
         run: gcloud auth configure-docker $REGION-docker.pkg.dev
 
-      - name: Terraform Init
-        working-directory: ./infra
-        run: terraform init
-
-      - name: Import existing resources (safe CI handling)
+      - name: Terraform Init & Apply (infra/)
         working-directory: ./infra
         run: |
-          terraform import google_storage_bucket.doc_bucket $BUCKET_NAME || true
-          terraform import google_pubsub_topic.upload_topic $TOPIC_NAME || true
-          terraform import google_artifact_registry_repository.docker_repo \
-            projects/$PROJECT_ID/locations/$REGION/repositories/$REPO_NAME || true
-
-      - name: Terraform Plan + Apply
-        working-directory: ./infra
-        run: |
-          terraform plan -out=tfplan || true
-          terraform apply -auto-approve -var="gcp_credentials=$GOOGLE_CREDENTIALS" -var="project_id=$PROJECT_ID" tfplan || true
+          terraform init
+          terraform apply -auto-approve -var="gcp_credentials=$GOOGLE_CREDENTIALS" -var="project_id=$PROJECT_ID"
 
       - name: Build & Push Upload API Image
         run: |
