@@ -29,8 +29,7 @@ resource "google_container_cluster" "gke_cluster" {
   }
 
   lifecycle {
-    prevent_destroy = true
-    ignore_changes  = [labels, description]
+    ignore_changes = [initial_node_count]
   }
 }
 
@@ -41,7 +40,6 @@ resource "google_storage_bucket" "doc_bucket" {
 
   lifecycle {
     prevent_destroy = true
-    ignore_changes  = [labels, description]
   }
 }
 
@@ -50,6 +48,5 @@ resource "google_pubsub_topic" "upload_topic" {
 
   lifecycle {
     prevent_destroy = true
-    ignore_changes  = [labels, description]
   }
 }
