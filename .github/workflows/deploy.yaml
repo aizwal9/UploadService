@@ -25,6 +25,14 @@ jobs:
         with:
           project_id: ${{ secrets.GCP_PROJECT_ID }}
           service_account_key: ${{ secrets.GCP_SA_KEY }}
+          export_default_credentials: true
+
+      - name: Get GKE Credentials
+        run: |
+          gcloud container clusters get-credentials document-cluster \
+            --zone asia-south1-a \
+            --project ${{ secrets.GCP_PROJECT_ID }}
+
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
