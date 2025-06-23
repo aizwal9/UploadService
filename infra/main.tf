@@ -12,7 +12,7 @@ resource "google_artifact_registry_repository" "docker_repo" {
 
   lifecycle {
     prevent_destroy = true
-    ignore_changes  = [labels, description]
+    ignore_changes  = [location]
   }
 }
 
@@ -29,7 +29,8 @@ resource "google_container_cluster" "gke_cluster" {
   }
 
   lifecycle {
-    ignore_changes = [initial_node_count]
+    prevent_destroy = true
+    ignore_changes  = [location]
   }
 }
 
@@ -40,6 +41,7 @@ resource "google_storage_bucket" "doc_bucket" {
 
   lifecycle {
     prevent_destroy = true
+    ignore_changes  = [location]
   }
 }
 
@@ -48,5 +50,6 @@ resource "google_pubsub_topic" "upload_topic" {
 
   lifecycle {
     prevent_destroy = true
+    ignore_changes  = [location]
   }
 }
