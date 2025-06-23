@@ -2,7 +2,7 @@ name: Deploy Cloud Doc Pipeline
 
 on:
   push:
-    branches: [ master ]
+    branches: [ main ]
 
 env:
   PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
